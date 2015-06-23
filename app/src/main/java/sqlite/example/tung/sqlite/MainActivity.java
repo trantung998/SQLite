@@ -2,8 +2,11 @@ package sqlite.example.tung.sqlite;
 
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.List;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -12,27 +15,35 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-    }
+        SQLiteHandle db = new SQLiteHandle(this);
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
+        //insert
+        db.addContact(new Contact("Tung","01632449974"));
+        db.addContact(new Contact("Hai", "01561545182"));
+        db.addContact(new Contact("Luan", "01561545182"));
+        db.addContact(new Contact("Hung", "01561545182"));
+        db.addContact(new Contact("Giang", "01561545182"));
+        db.addContact(new Contact("Thao", "01561545182"));
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // Reading all contacts
+        Log.d("Reading: ", "Reading all contacts..");
+        List<Contact> contacts = db.getAllContacts();
+        for (Contact cn : contacts) {
+            String log = "Id: "+cn.getId()+" ,Name: " + cn.getName() + " ,Phone: " + cn.getPhone_number();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
         }
 
-        return super.onOptionsItemSelected(item);
+        //delete contact
+        Log.d("Delete: ", "Delete contact..");
+        db.deleteContact(contacts.get(0));
+        Log.d("Reading: ", "Reading all contacts..");
+        contacts = db.getAllContacts();
+        for (Contact cn : contacts) {
+            String log = "Id: "+cn.getId()+" ,Name: " + cn.getName() + " ,Phone: " + cn.getPhone_number();
+            // Writing Contacts to log
+            Log.d("Name: ", log);
+        }
+
     }
 }
